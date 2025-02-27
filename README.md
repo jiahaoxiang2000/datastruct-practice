@@ -28,58 +28,88 @@ datastruct-practice
 │   ├── test_linked_list.cpp # Unit tests for LinkedList
 │   ├── test_stack.cpp       # Unit tests for Stack
 │   ├── test_queue.cpp       # Unit tests for Queue
-│   └── test_tree.cpp        # Unit tests for Tree
+│   ├── test_tree.cpp        # Unit tests for Tree
+│   └── test_main.cpp       # Main test runner
 └── README.md               # Project documentation
 ```
 
 ## Setup Instructions
 
 1. Clone the repository:
+
    ```
    git clone <repository-url>
    cd datastruct-practice
    ```
 
 2. Create a build directory and navigate into it:
+
    ```
    mkdir build
    cd build
    ```
 
 3. Run CMake to configure the project:
+
    ```
    cmake ..
    ```
 
 4. Build the project:
+
    ```
    make
    ```
 
 5. Run the tests:
+
    ```
-   cd tests
-   make
-   ./run_tests
+   ctest
    ```
 
-## Usage Examples
+   Or run the test executable directly:
 
-### Linked List
+   ```
+   ./tests/run_tests
+   ```
 
-To use the LinkedList class, include the header file and create an instance of the class. You can then call its methods to manipulate the list.
+## Testing Framework
 
-### Stack
+The project uses Google Test for unit testing. Each data structure has its own test file:
 
-The Stack class can be used similarly by including its header and creating an instance. Use the provided methods to push and pop elements.
+- `test_linked_list.cpp`: Tests for linked list operations (insert, delete, search)
+- `test_stack.cpp`: Tests for stack operations (push, pop, peek)
+- `test_queue.cpp`: Tests for queue operations (enqueue, dequeue, peek)
+- `test_tree.cpp`: Tests for tree operations (insert, delete, traversal)
 
-### Queue
+To run specific tests:
 
-The Queue class allows for enqueueing and dequeueing elements. Include the header and create an instance to start using it.
+```
+./tests/run_tests --gtest_filter=LinkedListTest.*
+```
 
-### Tree
+## Building Your Own Tests
 
-For the Tree class, include the header and create an instance to insert nodes and traverse the tree.
+You can add your own test cases by:
+
+1. Creating a new test file in the `tests` directory
+2. Adding your test cases using the Google Test framework
+3. Updating the `CMakeLists.txt` in the `tests` directory to include your new test file
+
+Example:
+
+```cpp
+// tests/my_custom_test.cpp
+#include <gtest/gtest.h>
+#include <datastruct/linked_list.h>
+
+TEST(CustomTest, MyTestCase) {
+    LinkedList* list = linked_list_create();
+    linked_list_append(list, 10);
+    EXPECT_EQ(linked_list_size(list), 1);
+    linked_list_destroy(list);
+}
+```
 
 ## Contributing
 
