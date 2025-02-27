@@ -2,50 +2,54 @@
 #include <stdlib.h>
 #include "datastruct/stack.h"
 
-typedef struct Stack {
-    int top;
-    int capacity;
-    int* array;
-} Stack;
-
-Stack* createStack(int capacity) {
-    Stack* stack = (Stack*)malloc(sizeof(Stack));
+Stack *createStack(int capacity)
+{
+    Stack *stack = (Stack *)malloc(sizeof(Stack));
     stack->capacity = capacity;
     stack->top = -1;
-    stack->array = (int*)malloc(stack->capacity * sizeof(int));
+    stack->array = (int *)malloc(stack->capacity * sizeof(int));
     return stack;
 }
 
-int isFull(Stack* stack) {
+int isFull(Stack *stack)
+{
     return stack->top == stack->capacity - 1;
 }
 
-int isEmpty(Stack* stack) {
+int isEmpty(Stack *stack)
+{
     return stack->top == -1;
 }
 
-void push(Stack* stack, int item) {
-    if (isFull(stack)) {
+void push(Stack *stack, int item)
+{
+    if (isFull(stack))
+    {
         return;
     }
     stack->array[++stack->top] = item;
 }
 
-int pop(Stack* stack) {
-    if (isEmpty(stack)) {
+int pop(Stack *stack)
+{
+    if (isEmpty(stack))
+    {
         return -1; // Return -1 if stack is empty
     }
     return stack->array[stack->top--];
 }
 
-int peek(Stack* stack) {
-    if (isEmpty(stack)) {
+int peek(Stack *stack)
+{
+    if (isEmpty(stack))
+    {
         return -1; // Return -1 if stack is empty
     }
     return stack->array[stack->top];
 }
 
-void freeStack(Stack* stack) {
+void freeStack(Stack *stack)
+{
     free(stack->array);
     free(stack);
 }

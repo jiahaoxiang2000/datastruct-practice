@@ -3,39 +3,43 @@
 
 class LinkedListTest : public ::testing::Test {
 protected:
-    LinkedList<int>* list;
+    LinkedList* list;
 
     void SetUp() override {
-        list = new LinkedList<int>();
+        list = create_linked_list();
     }
 
     void TearDown() override {
-        delete list;
+        free_linked_list(list);
     }
 };
 
+TEST_F(LinkedListTest, CreateEmptyList) {
+    EXPECT_EQ(list->head, nullptr);
+}
+
 TEST_F(LinkedListTest, AddNode) {
-    list->add(1);
-    EXPECT_EQ(list->get(0), 1);
+    add_node(list, 5);
+    EXPECT_EQ(list->head->data, 5);
+    EXPECT_EQ(list->head->next, nullptr);
+
+    add_node(list, 10);
+    EXPECT_EQ(list->head->data, 10);
+    EXPECT_EQ(list->head->next->data, 5);
 }
 
 TEST_F(LinkedListTest, RemoveNode) {
-    list->add(1);
-    list->remove(1);
-    EXPECT_THROW(list->get(0), std::out_of_range);
+    add_node(list, 5);
+    add_node(list, 10);
+    add_node(list, 15);
+
+    remove_node(list, 10);
+    EXPECT_EQ(list->head->data, 15);
+    EXPECT_EQ(list->head->next->data, 5);
 }
 
-TEST_F(LinkedListTest, TraverseList) {
-    list->add(1);
-    list->add(2);
-    std::vector<int> expected = {1, 2};
-    EXPECT_EQ(list->traverse(), expected);
-}
-
-TEST_F(LinkedListTest, SizeOfList) {
-    EXPECT_EQ(list->size(), 0);
-    list->add(1);
-    EXPECT_EQ(list->size(), 1);
-    list->add(2);
-    EXPECT_EQ(list->size(), 2);
+TEST_F(LinkedListTest, RemoveNonExistentNode) {
+    add_node(list, 5);
+    remove_node(list, 10);
+    EXPECT_EQ(list->head->data, 5);
 }

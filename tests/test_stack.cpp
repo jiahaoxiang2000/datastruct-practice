@@ -1,24 +1,51 @@
 #include <gtest/gtest.h>
-#include "datastruct/stack.h"
+#include "../include/datastruct/stack.h"
 
-TEST(StackTest, PushAndPop) {
-    Stack<int> stack;
-    stack.push(1);
-    stack.push(2);
-    EXPECT_EQ(stack.pop(), 2);
-    EXPECT_EQ(stack.pop(), 1);
+class StackTest : public ::testing::Test
+{
+protected:
+    Stack *stack;
+
+    void SetUp() override
+    {
+        stack = createStack(5);
+    }
+
+    void TearDown() override
+    {
+        freeStack(stack);
+    }
+};
+
+TEST_F(StackTest, CreateEmptyStack)
+{
+    EXPECT_TRUE(isEmpty(stack));
+    EXPECT_FALSE(isFull(stack));
 }
 
-TEST(StackTest, IsEmpty) {
-    Stack<int> stack;
-    EXPECT_TRUE(stack.isEmpty());
-    stack.push(1);
-    EXPECT_FALSE(stack.isEmpty());
-    stack.pop();
-    EXPECT_TRUE(stack.isEmpty());
+TEST_F(StackTest, PushAndPeek)
+{
+    push(stack, 10);
+    EXPECT_EQ(peek(stack), 10);
+    EXPECT_FALSE(isEmpty(stack));
 }
 
-TEST(StackTest, PopEmptyStack) {
-    Stack<int> stack;
-    EXPECT_THROW(stack.pop(), std::out_of_range);
+TEST_F(StackTest, PushAndPop)
+{
+    push(stack, 10);
+    push(stack, 20);
+    EXPECT_EQ(pop(stack), 20);
+    EXPECT_EQ(pop(stack), 10);
+    EXPECT_TRUE(isEmpty(stack));
+}
+
+TEST_F(StackTest, FullStack)
+{
+    for (int i = 0; i < 5; i++)
+    {
+        push(stack, i);
+    }
+    EXPECT_TRUE(isFull(stack));
+    push(stack, 100); // Should not add this item
+    EXPECT_EQ(peek(stack), 4);
 }

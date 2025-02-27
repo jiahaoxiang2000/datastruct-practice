@@ -1,36 +1,53 @@
 #include <gtest/gtest.h>
 #include "datastruct/tree.h"
 
-TEST(TreeTest, InsertAndSearch) {
-    Tree<int> tree;
-    tree.insert(10);
-    tree.insert(5);
-    tree.insert(15);
+class TreeTest : public ::testing::Test
+{
+protected:
+    Tree *tree;
 
-    EXPECT_TRUE(tree.search(10));
-    EXPECT_TRUE(tree.search(5));
-    EXPECT_TRUE(tree.search(15));
-    EXPECT_FALSE(tree.search(20));
+    void SetUp() override
+    {
+        tree = create_tree();
+    }
+
+    void TearDown() override
+    {
+        free_tree(tree);
+    }
+};
+
+TEST_F(TreeTest, CreateEmptyTree)
+{
+    EXPECT_EQ(tree->root, nullptr);
 }
 
-TEST(TreeTest, InOrderTraversal) {
-    Tree<int> tree;
-    tree.insert(10);
-    tree.insert(5);
-    tree.insert(15);
-    
-    std::vector<int> expected = {5, 10, 15};
-    EXPECT_EQ(tree.inOrderTraversal(), expected);
+TEST_F(TreeTest, InsertAndSearch)
+{
+    insert(tree, 10);
+    insert(tree, 5);
+    insert(tree, 15);
+
+    TreeNode *found = search(tree, 5);
+    EXPECT_NE(found, nullptr);
+    EXPECT_EQ(found->value, 5);
+
+    found = search(tree, 99);
+    EXPECT_EQ(found, nullptr);
 }
 
-TEST(TreeTest, DeleteNode) {
-    Tree<int> tree;
-    tree.insert(10);
-    tree.insert(5);
-    tree.insert(15);
-    tree.deleteNode(10);
+TEST_F(TreeTest, InsertMultipleNodes)
+{
+    int values[] = {10, 5, 15, 3, 7, 12, 18};
+    for (int val : values)
+    {
+        insert(tree, val);
+    }
 
-    EXPECT_FALSE(tree.search(10));
-    EXPECT_TRUE(tree.search(5));
-    EXPECT_TRUE(tree.search(15));
+    for (int val : values)
+    {
+        TreeNode *found = search(tree, val);
+        EXPECT_NE(found, nullptr);
+        EXPECT_EQ(found->value, val);
+    }
 }
