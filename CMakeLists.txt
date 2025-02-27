@@ -31,6 +31,7 @@ add_library(datastruct
     src/stack.c
     src/linked_list.c
     src/tree.c
+    src/array_list.c
 )
 
 # Enable testing
@@ -83,6 +84,15 @@ target_link_libraries(test_tree
   pthread
 )
 add_test(NAME TreeTest COMMAND test_tree)
+
+add_executable(test_array_list tests/test_array_list.cpp)
+target_link_libraries(test_array_list 
+  datastruct 
+  gtest
+  gtest_main
+  pthread
+)
+add_test(NAME ArrayListTest COMMAND test_array_list)
 
 # Copy header files to include directory
 file(COPY ${CMAKE_SOURCE_DIR}/include/datastruct DESTINATION ${CMAKE_BINARY_DIR}/include)
